@@ -1,8 +1,11 @@
 ﻿using Console.Wizard.Config;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,8 +14,8 @@ namespace Console.Wizard.Service
     public class WizardService : IHostedService, IDisposable
     {
         private readonly ILogger _logger;
-        private readonly IOptions<WizardConfig> _config;
-        public WizardService(ILogger<WizardService> logger, IOptions<WizardConfig> config)
+        private readonly IConfiguration _config;
+        public WizardService(ILogger<WizardService> logger, IConfiguration config)
         {
             _logger = logger;
             _config = config;
@@ -25,7 +28,7 @@ namespace Console.Wizard.Service
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Starting wizard: " + _config.Value.WizardName);
+            _logger.LogInformation("Starting wizard: " + _config.GetValue<string>("WizardName"));
             return Task.CompletedTask;
         }
 
